@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://stylebar/content/" type="text/css"?>
+<overlay id="Scrapper-Overlay"
+xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script src="chrome://stylebar/content/stylebar.js" />
+<toolbox id="navigator-toolbox">
+   <toolbar id="StyleBarToolbar" toolbarname="StyleBar Toolbar" >
+	   <div style="margin-top:5px">
+		   <label id ="securtyL" value=""/>
+		   <label id ="securtyLevelL" value="" style="margin-left:0px;font-weight:bold" />
+		   <label id ="securtyStateL" value="" style="font-weight:bold;margin-left:0px"/>
+		   <label id ="securtyTransferNoteL" value="" />
+		   <label id ="securtyTransferStateL" value="" style="margin-left:0px;font-weight:bold;" />
+		   <label id ="securtyTransferNote2L" value="" style="margin-left:0px" />
+	   </div>
+	   <div style="margin-top:5px;position:fixed;left:535px;white-space:nowrap">
+		   <label id ="visitStateL" value="" />
+		   <label id ="DomainNameL" style="font-weight:bold;letter-spacing: 2px;"/>
+		   <label id ="generalNoteL" value="" />
+	   </div>
+   </toolbar>
+</toolbox>
+</overlay>

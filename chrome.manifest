@@ -1,0 +1,2 @@
+content stylebar content/
+overlay chrome://browser/content/browser.xul chrome://stylebar/content/stylebar.xul
