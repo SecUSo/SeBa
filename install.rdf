@@ -8,33 +8,32 @@
 				<em:locale>de-DE</em:locale>
 				<em:name>SeBa - Security Toolbar</em:name>
 				<em:description>Ein Add-on, dass die Verständlichkeit der Adressleiste verbessert</em:description>
-				<em:creator>TU Darmstadt - SecUSo</em:creator>
-				<em:homepageURL>https://www.secuso.informatik.tu-darmstadt.de/de/research/results/seba-security-deutsch/</em:homepageURL>
+				<em:creator>TU Darmstadt - SECUSO</em:creator>
+				<em:homepageURL>https://www.secuso.informatik.tu-darmstadt.de/index.php?id=9875</em:homepageURL>
 			</Description>
 		</em:localized>
 		<em:localized>
 			<Description>
 				<em:locale>en-US</em:locale>
 				<em:name>SeBa - Security Toolbar</em:name>
-				<em:description>An add-on to improve comprehensibility in the address bar</em:description>
-				<em:creator>TU Darmstadt - SecUSo</em:creator>
-				<em:homepageURL>https://www.secuso.informatik.tu-darmstadt.de/de/research/results/seba-security-toolbar/</em:homepageURL>
+				<em:description>An add-on to improve comprehensibility of the address bar</em:description>
+				<em:creator>TU Darmstadt - SECUSO</em:creator>
+				<em:homepageURL>https://www.secuso.informatik.tu-darmstadt.de/index.php?id=9875</em:homepageURL>
 			</Description>
 		</em:localized>
 
 		<em:name>SeBa - Security Toolbar</em:name>
-		<em:description>An add-on to improve comprehensibility in the address bar</em:description>
-		<em:creator>TU Darmstadt - SecUSo</em:creator>
+		<em:description>An add-on to improve comprehensibility of the address bar</em:description>
+		<em:creator>TU Darmstadt - SECUSO</em:creator>
 		<em:homepageURL>https://www.secuso.informatik.tu-darmstadt.de/de/research/results/seba-security-toolbar/</em:homepageURL>
-		<em:version>2.0</em:version>
+		<em:version>2.0.2</em:version>
 		<em:type>2</em:type>
-		<em:iconURL>chrome://stylebar/content/logo.png</em:iconURL>
 
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
 				<em:minVersion>23.0</em:minVersion>
-				<em:maxVersion>38.0</em:maxVersion>
+				<em:maxVersion>50.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 	</Description>

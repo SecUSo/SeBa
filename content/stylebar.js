@@ -14,6 +14,9 @@ var certificationInformation = {
 	issuerOU: "",
 	issuerO: "",
 	issuerC: "",
+	domainMismatch: "",
+	notValid: "",
+	untrusted: "", 
 
 	loadInformation: function (xhr, error) {
 		certificationInformation.clear();
@@ -48,7 +51,22 @@ var certificationInformation = {
 
 			if (secInfo instanceof Ci.nsISSLStatusProvider) {
 				var cert = secInfo.QueryInterface(Ci.nsISSLStatusProvider).SSLStatus.QueryInterface(Ci.nsISSLStatus).serverCert;
+				var status = gBrowser.securityUI.QueryInterface(Components.interfaces.nsISSLStatusProvider).SSLStatus;
+				
+				if (status && !status.isUntrusted) {
+					if (status.isExtendedValidation) {
+						urlPruning.setHttpsEVInfo(); //Extended validation
+					}
 
+					certificationInformation.domainMismatch = status.isDomainMismatch; // Domain of certificate doesn't match website
+					certificationInformation.notValid = status.isNotValidAtThisTime; // Expired
+					certificationInformation.untrusted = status.isUntrusted; // Missing or untrusted issuer/ self signed
+
+					// Cipher: status.cipherName);
+					// Key length: status.keyLength);
+					// Protocol: status.protocolVersion); //  0:SSL3, 1: TLS1, 2: TLS1.1, 3: TLS1.2, 4: TLS1.3  
+				}
+				
 				certificationInformation.commonName = cert.commonName;
 				certificationInformation.organization = cert.organization;
 				certificationInformation.issuerOrganization = cert.issuerOrganization;
@@ -67,22 +85,22 @@ var certificationInformation = {
 					var b;
 
 					if (value) {
-						if (value.contains("CN=")) {
+						if (value.includes("CN=")) {
 							certificationInformation.issuerCN = value.replace("CN=", "")
 							lastValue = "CN=";
 						}
 
-						else if (value.contains("OU=")) {
+						else if (value.includes("OU=")) {
 							certificationInformation.issuerOU += value.replace("OU=", "")
 							lastValue = "OU=";
 						}
 
-						else if (value.contains("O=")) {
+						else if (value.includes("O=")) {
 							certificationInformation.issuerO = value.replace("O=", "")
 							lastValue = "O=";
 						}
 
-						else if (value.contains("C=")) {
+						else if (value.includes("C=")) {
 							certificationInformation.issuerC = value.replace("C=", "")
 							lastValue = "C=";
 						}
@@ -96,7 +114,7 @@ var certificationInformation = {
 			}
 		}
 		catch (err) {
-			alert(err);
+			//console.log("Error");
 		}
 	},
 
@@ -134,6 +152,9 @@ var certificationInformation = {
 		certificationInformation.issuerOU = "";
 		certificationInformation.issuerO = "";
 		certificationInformation.issuerC = "";
+		certificationInformation.domainMismatch = "";
+		certificationInformation.notValid = "";
+		certificationInformation.untrusted = "";
 	}
 }
 
@@ -180,11 +201,8 @@ var language = {
 		if (this.currentLanguage == "de") {
 			this.languageData = this.de;
 		}
-		else if (this.currentLanguage.search("en") != -1) {
-			this.languageData = this.en;
-		}
 		else {
-			alert("This language isn't support");
+			this.languageData = this.en;
 		}
 	},
 
@@ -240,34 +258,16 @@ var language = {
 
 var validation = {
 	checkHttpsEV: function (url) {
-		var req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
+		var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Components.interfaces.nsIXMLHttpRequest);
 		req.open('GET', url, true);
+		var channel = req.channel.QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
+		channel.setPrivate(true);
 
 		req.onload = function (e) {
 			certificationInformation.loadInformation(req);
-
-			//bad check.Change it if there is a better way
-			if (certificationInformation.issuerCN.contains("Extended Validation") || certificationInformation.issuerCN.contains(" EV ")) {
-				urlPruning.setHttpsEVInfo();
-			}
 		};
 
 		req.send();
-	},
-
-	isHttps: function (url) {
-		var protocol = this.getProtocol(url);
-		return protocol == "https:";
-	},
-
-	isHttp: function (url) {
-		var protocol = this.getProtocol(url);
-		return protocol == "http:";
-	},
-
-	getProtocol: function (url) {
-		var tmp = url.split("/");
-		return tmp[0];
 	},
 
 	isURL: function (url) {
@@ -319,7 +319,7 @@ var urlPruning = {
 		}
 	},
 
-	getProtocoll: function (url) {
+	getProtocol: function (url) {
 		var tmp = url.split(":");
 		return tmp[0];
 	},
@@ -330,14 +330,14 @@ var urlPruning = {
 		if (win != win.top) return;
 
 		if (validation.isURL(doc.location.href)) {
-			document.getElementById("DomainNameL").innerHTML = value = urlPruning.getDomainName(doc.location.href);
-			var protocol = urlPruning.getProtocoll(doc.location.href);
+			document.getElementById("DomainNameL").textContent = value = urlPruning.getDomainName(doc.location.href);
+			var protocol = urlPruning.getProtocol(doc.location.href);
 
-			if (validation.isHttps(doc.location.href)) {
+			if (protocol == "https") {
 				validation.checkHttpsEV(doc.location.href);
 				urlPruning.setHttpsInfo(protocol);
 			}
-			else if (validation.isHttp(doc.location.href)) {
+			else if (protocol == "http") {
 				urlPruning.setHttpInfo(protocol);
 			}
 			language.setTextStateCurrentSite();

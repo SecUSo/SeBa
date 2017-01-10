@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://stylebar/content/" type="text/css"?>
 <overlay id="Scrapper-Overlay"
-xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script src="chrome://stylebar/content/stylebar.js" />
 <toolbox id="navigator-toolbox">
    <toolbar id="StyleBarToolbar" toolbarname="StyleBar Toolbar" >
